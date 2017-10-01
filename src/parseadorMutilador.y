@@ -8,7 +8,7 @@
 %union {
     char* string_t;
     int integer_t;
-    Programa* programa_t;
+    Program* program_t;
     Class* class;
     Feature* feature;
     Formal* form;
@@ -28,3 +28,16 @@
 %type<expr> expr
 %type<list> class_list feature_list formal_list expr_list method_list case_list default_list
 %%
+
+program :
+    class
+    {
+        Program* p;
+        new_program(&p);
+        add_class(p, $1);
+        $$ = p;
+    }
+    |program class
+    {
+        add_class($1,$2);
+    };
