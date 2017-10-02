@@ -26,4 +26,5 @@ enum _type_list {
 };
 
 int new_list (List**, Type_List);
-int add (List*, void*);
+int add_e (List*, void*);
+#define add(L,E) (add_e(L,(void*) E))

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ast.h"
+#include "list.h"
 %}
 
 
@@ -35,12 +36,12 @@ program :
     {
         Program* p;
         new_program(&p);
-        add_class(p, $1);
+        add(p->classes, $1);
         $$ = p;
     }
-    |program class
+    | program class
     {
-        add_class($1,$2);
+        add($1->classes,$2);
     };
 
 class:
@@ -50,9 +51,51 @@ class:
         new_class(&c,$2,NULL,$4);
         $$ = c;
     }
-    |CLASS TYPE INHERITS TYPE
+    | CLASS TYPE INHERITS TYPE
     {
         Class* c;
         new_class(&c,$2,$4,$6);
         $$ = c;
     };
+
+feature_list :
+    %empty
+    {
+        List* l;
+        new_list(&l,E_FEATURE);
+        $$ = 1;
+    }
+    | feature_list feature
+    {
+        add($1,$2);
+    };
+
+feature :
+    TYPE ID '(' formal_list ')' '{' expr_list RETURN expr ';' '}'
+    {
+        Feature* f;
+        new_feature(&f,METHOD,$1,$2,$9,$4,$7);
+        $$ = f;
+    }
+    | TYPE ID ';'
+    {
+        Feature* f;
+        new_feature(&f,$1,$2,NULL,NULL,NULL);
+    }
+    | TYPE ID '=' expr ';'
+    {
+        Feature* f;
+        new_feature(&f,$1,$2,$4,NULL,NULL);
+    };
+
+formal_list :
+    %empty
+    {
+        List* l;
+        new_list(&l,E_FORMAL);
+        $$ = 1;
+    }
+    | formal_list formal
+    {
+        add($1,$2);
+    }

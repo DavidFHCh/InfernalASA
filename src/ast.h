@@ -26,9 +26,9 @@ enum _type_feature {
 
 struct _feature {
     Feature_Type type;//used to allow repetition of id's between methods and atributes.
-    char* id;
     char* name_type;
-    Expr* asign_return;//value asignation or return value.
+    char* id;
+    Expression* asign_return;//value asignation or return value.
     List* formals;//params
     List* exprs;//method's body
 };
@@ -68,16 +68,11 @@ struct _exp {
   } op;
 };
 
-exp* make_int_exp(int);
-exp* make_bool_exp(int);
-exp* make_str_exp(char*);
+Expression* make_int_exp(int);
+Expression* make_bool_exp(int);
+Expression* make_str_exp(char*);
 
 int new_program(Program**);
 int new_class(Class**,char*,char*,List*);
 int new_feature(Feature**,Type_Feature,char*,char*,Expr*,List*,List*);
 int new_formal(Formal**,char*,char*);
-
-int add_class(Program*, void*);//first ask for the list, then call the add() from list.h
-int add_feature(Class*, void*);
-int add_formal(Feature*, void*);
-int add_expr(Feature*, void*);
