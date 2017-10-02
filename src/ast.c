@@ -1,27 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "list.h"
+#include "ast.h"
 
-typedef enum _ops {
-  ADD, SUBST, MULT, DIV, LT, LE, EQ
-} ops;
 
-typedef struct _exp {
-  enum {
-    INT,  STR,  BOOL, BIN_OP
-  } tag;
-  
-  union {
-    int int_expr;
-    int bool_expr;
-    char* str_expr;
-    struct {
-      ops op;
-      struct _exp* left_expr; 
-      struct _exp* right_expr;
-    } binop_expr;
-  } op;
-} exp;
 
 // Constructor de expresiones de tipo INT
 exp* make_int_exp(int value) {

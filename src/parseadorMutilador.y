@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "ast.h"
 %}
 
 
@@ -40,4 +41,18 @@ program :
     |program class
     {
         add_class($1,$2);
+    };
+
+class:
+    CLASS TYPE
+    {
+        Class* c;
+        new_class(&c,$2,NULL,$4);
+        $$ = c;
+    }
+    |CLASS TYPE INHERITS TYPE
+    {
+        Class* c;
+        new_class(&c,$2,$4,$6);
+        $$ = c;
     };
