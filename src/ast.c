@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "list.h"
+#include "ast.h"
 
-typedef enum _ops {
-  ADD, SUBST, MULT, DIV, LT, LE, EQ
-} ops;
 
+<<<<<<< HEAD:ast.c
 char* op_to_string(ops o) {
   switch(o) {
     case ADD: 
@@ -40,6 +40,8 @@ typedef struct _exp {
     } binop_expr;
   } op;
 } exp;
+=======
+>>>>>>> parser:src/ast.c
 
 // Constructor de expresiones de tipo INT
 exp* make_int_exp(int value) {
