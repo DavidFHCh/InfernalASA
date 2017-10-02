@@ -11,7 +11,7 @@ struct _node {
 
 struct _list {
   Node* head;
-  Node* final;
+  Node* last;
   int elements;
   Type_List type;
 };
@@ -26,4 +26,4 @@ enum _type_list {
 };
 
 int new_list (List**, Type_List);
-int add (List*, void*);  
+int add (List*, void*);
