@@ -24,36 +24,36 @@ char* op_to_string(ops o) {
   }
 }
 
-// Constructor de Expresiones de tipo INT
+// Constructor de expresiones de tipo INT
 Exp* make_int_Exp(int value) {
   Exp* e = (Exp*) malloc(sizeof(Exp));
   e->tag = INT;
-  e->op.int_Expr = value;
+  e->op.int_expr = value;
   return e;
 }
 
-// Constructor de Expresiones de tipo BOOL
+// Constructor de expresiones de tipo BOOL
 Exp* make_bool_Exp(int value) {
   Exp* e = (Exp*) malloc(sizeof(Exp));
   e->tag = BOOL;
-  e->op.bool_Expr = value;
+  e->op.bool_expr = value;
   return e;
 }
 
-// Constructor de Expresiones de tipo STR
+// Constructor de expresiones de tipo STR
 Exp* make_str_Exp(char* value) {
   Exp* e = (Exp*) malloc(sizeof(Exp));
   e->tag = STR;
-  e->op.str_Expr = value;
+  e->op.str_expr = value;
   return e;
 }
 
 Exp* make_op_Exp(ops op, Exp* left, Exp* right) {
   Exp* e = (Exp*) malloc(sizeof(Exp));
   e->tag = BIN_OP;
-  e->op.binop_Expr.op = op;
-  e->op.binop_Expr.left_Expr = left;
-  e->op.binop_Expr.right_Expr = right;
+  e->op.binop_expr.op = op;
+  e->op.binop_expr.left_expr = left;
+  e->op.binop_expr.right_expr = right;
   return e;
 }
 
@@ -64,24 +64,24 @@ char* Exp_to_string(Exp* e) {
   switch(e->tag) {
     case INT:
       str = malloc(128);
-      sprintf(str, "<INT, %d>", e->op.int_Expr);
+      sprintf(str, "<INT, %d>", e->op.int_expr);
       return str;
       break;
     case STR:
       str = malloc(512);
-      sprintf(str, "<STR, %s>", e->op.str_Expr);
+      sprintf(str, "<STR, %s>", e->op.str_expr);
       return str;
       break;
     case BOOL:
       str = malloc(128);
-      sprintf(str, "<BOOL, %d>", e->op.bool_Expr);
+      sprintf(str, "<BOOL, %d>", e->op.bool_expr);
       return str;
       break;
     case BIN_OP:
-      left = Exp_to_string(e->op.binop_Expr.left_Expr);
-      right = Exp_to_string(e->op.binop_Expr.right_Expr);
+      left = Exp_to_string(e->op.binop_expr.left_expr);
+      right = Exp_to_string(e->op.binop_expr.right_expr);
       str = malloc(64 + strlen(left) + strlen(right));
-      sprintf(str, "<BIN_OP, %s, %s, %s>", op_to_string(e->op.binop_Expr.op), left, right);
+      sprintf(str, "<BIN_OP, %s, %s, %s>", op_to_string(e->op.binop_expr.op), left, right);
       return str;
       break;
   }

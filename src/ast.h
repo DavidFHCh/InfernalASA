@@ -10,7 +10,7 @@ typedef enum _ops ops;
 
 struct _program {
     List* classes;
-}:
+};
 
 struct _class {
     char* name;
@@ -36,7 +36,7 @@ struct _feature {
 struct _formal {
     char* type;
     char* id;
-}
+};
 
 enum _ops {
   ADD,
@@ -46,7 +46,7 @@ enum _ops {
   LT,
   LE,
   EQ
-}
+};
 
 struct _exp {
   enum {
@@ -71,10 +71,10 @@ struct _exp {
 Exp* make_int_exp(int);
 Exp* make_bool_exp(int);
 Exp* make_str_exp(char*);
-Exp* make_op_exp(ops,exp*,exp*)
+Exp* make_op_exp(ops,Exp*,Exp*);
 char* op_to_string(ops);
 
 int new_program(Program**);
 int new_class(Class**,char*,char*,List*);
-int new_feature(Feature**,Type_Feature,char*,char*,Expr*,List*,List*);
+int new_feature(Feature**,Feature_Type,char*,char*,Exp*,List*,List*);
 int new_formal(Formal**,char*,char*);
