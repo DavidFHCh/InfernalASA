@@ -26,3 +26,4 @@ enum _type_list {
 };
 
 int new_list (List**, Type_List);
+int add (List*, void*);  
