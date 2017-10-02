@@ -19,9 +19,9 @@ struct _class {
 };
 
 enum _type_feature {
-    DECLARATION;
-    ASIGNATION;
-    METHOD;
+    DECLARATION,
+    ASIGNATION,
+    METHOD
 };
 
 struct _feature {
@@ -39,12 +39,21 @@ struct _formal {
 }
 
 enum _ops {
-  ADD, SUBST, MULT, DIV, LT, LE, EQ
+  ADD,
+  SUBST,
+  MULT,
+  DIV,
+  LT,
+  LE,
+  EQ
 }
 
 struct _exp {
   enum {
-    INT,  STR,  BOOL, BIN_OP
+    INT,
+    STR,
+    BOOL,
+    BIN_OP
   } tag;
 
   union {
