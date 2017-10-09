@@ -13,7 +13,7 @@ void error (char*);
 
 letter [A-Za-z]
 digit [0-9]
-whitespace [\f\r\t\v]
+whitespace [ \f\r\t\v]
 operator [-+*/<!]
 symbol [.,:;(){}=]
 %x string

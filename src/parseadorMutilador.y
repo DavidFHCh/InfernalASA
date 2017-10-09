@@ -38,7 +38,7 @@ extern FILE *yyin;
 
 program :
     class       { char *s = malloc(1024); 
-                  sprintf(s, "%s", $1);
+                  sprintf(s, "%s\n", $1);
                   printf("%s", s);
                   $$ = s; }
     | program class
@@ -50,10 +50,12 @@ program :
 class:
     CLASS TYPE '{' feature_list '}'  
                 { char *s = malloc(1024); 
-                  sprintf(s, "[CLASS %s \t\n%s]", $2, $4);
+                  sprintf(s, "[CLASS %s \n\t%s]", $2, $4);
                   $$ = s; }
     | CLASS TYPE INHERITS TYPE '{' feature_list '}'
-                { $$ = ""; }
+                { char *s = malloc(1024);
+                  sprintf(s, "\n[CLASS %s OF %s \n\t%s]", $2, $4, $6);
+                  $$ = s; }
     ;
 
 feature_list :
@@ -67,15 +69,15 @@ feature_list :
 feature :
     TYPE ID '(' formal_list ')' '{' expr_list RETURN expr ';' '}'
                 { char *s = malloc(1024); 
-                  sprintf(s, "[METHOD %s %s \n\t%s \n\t%s]", $2, $1, $4, $7);
+                  sprintf(s, "\n[METHOD %s %s \n\t%s \n\t%s \n[RETURN %s]]", $2, $1, $4, $7, $9);
                   $$ = s; }
     | TYPE ID ';' 
                 { char *s = malloc(1024);
-                  sprintf(s, "[ATTRIBUTE %s %s]", $2, $1);
+                  sprintf(s, "\n[ATTRIBUTE %s %s]", $2, $1);
                   $$ = s; }
     | TYPE ID '=' expr ';'
                 { char *s = malloc(1024);
-                  sprintf(s, "[ATTRIBUTE_ASSIGNMENT %s %s %s]", $2, $1, $4);
+                  sprintf(s, "\n[ATTRIBUTE_ASSIGNMENT %s %s %s]", $2, $1, $4);
                   $$ = s; }
     ;
 
@@ -98,7 +100,7 @@ expr_list :
 
 formal :
     TYPE ID     { char *s = malloc(256); 
-                  sprintf(s, "[FORMAL %s %s]", $2, $1);
+                  sprintf(s, "\n[FORMAL %s %s]\n", $2, $1);
                   $$ = s; }
     ;
 
@@ -113,90 +115,90 @@ case_list :
 default :
     DEFAULT ':' expr_list
                 { char *s = malloc(1024); 
-                  sprintf(s, "[DEFAULT \n\t%s]", $3);
+                  sprintf(s, "\n[DEFAULT \n\t%s]", $3);
                   $$ = s; }
     ;
 
 expr :
     ID '=' expr { char *s = malloc(1024); 
-                  sprintf(s, "[ASSIGN \n\t%s \n\t%s]", $1, $3);
+                  sprintf(s, "\n[ASSIGN %s %s]", $1, $3);
                   $$ = s; }
     | expr '.' ID '(' expr_arg_list ')'
                 { char *s = malloc(1024); 
-                  sprintf(s, "[CALL %s %s \n\t%s]", $1, $3, $5);
+                  sprintf(s, "\n[CALL %s %s %s]", $1, $3, $5);
                   $$ = s; }
     | expr '.' SUPER '.' ID '(' expr_arg_list ')'
                 { char *s = malloc(1024);
-                  sprintf(s, "[SUPER_CALL %s %s \n\t%s]", $1, $5, $7); 
+                  sprintf(s, "\n[SUPER_CALL %s %s %s]", $1, $5, $7); 
                   $$ = s; }
     | ID '(' expr_arg_list ')'
                 { char *s = malloc(1024); 
-                  sprintf(s, "[CALL %s \n\t%s]", $1, $3); 
+                  sprintf(s, "\n[CALL %s %s]", $1, $3); 
                   $$ = s; }
     | IF '(' expr ')' '{' expr_list '}'
                 { char *s = malloc(1024); 
-                  sprintf(s, "[IF \n\t%s \n\t%s ]", $3, $6);
+                  sprintf(s, "\n[IF %s %s]", $3, $6);
                   $$ = s; }
     | IF '(' expr ')' '{' expr_list '}' ELSE '{' expr_list '}'
                 { char *s = malloc(1024);
-                  sprintf(s, "[IF_ELSE \n\t%s \n\t%s \n\t%s]", $3, $6, $10); 
+                  sprintf(s, "\n[IF_ELSE %s %s %s]", $3, $6, $10); 
                   $$ = s; }
     | WHILE '(' expr ')' '{' expr_list '}'
                 { char *s = malloc(1024);
-                  sprintf(s, "[WHILE \n\t%s \n\t%s]", $3, $6); 
+                  sprintf(s, "\n[WHILE %s %s]", $3, $6); 
                   $$ = s; }
     | SWITCH '(' ID ')' '{' case_list default '}'
                 { char *s = malloc(1024);
-                  sprintf(s, "[SWITCH %s \n\t%s \n\t%s]", $3, $6, $7);
+                  sprintf(s, "\n[SWITCH %s %s %s]", $3, $6, $7);
                   $$ = s; }
     | NEW TYPE
                 { char *s = malloc(1024);
-                  sprintf(s, "[NEW %s]", $2);
+                  sprintf(s, "\n[NEW %s]", $2);
                   $$ = s; }
     | expr '+' expr 
                 { char *s = malloc(1024); 
-                  sprintf(s, "[ADD \n\t%s \n\t%s]", $1);
+                  sprintf(s, "\n[ADD %s %s]", $1);
                   $$ = s; }
     | expr '-' expr 
                 { char *s = malloc(1024); 
-                  sprintf(s, "[MIN \n\t%s \n\t%s]", $1);
+                  sprintf(s, "\n[MIN %s %s]", $1);
                   $$ = s; }
     | expr '*' expr
                 { char *s = malloc(1024); 
-                  sprintf(s, "[MUL \n\t%s \n\t%s]", $1);
+                  sprintf(s, "\n[MUL %s %s]", $1);
                   $$ = s; }
     | expr '/' expr
                 { char *s = malloc(1024); 
-                  sprintf(s, "[DIV \n\t%s \n\t%s]", $1);
+                  sprintf(s, "\n[DIV %s %s]", $1);
                   $$ = s; }
     | expr '<' expr
                 { char *s = malloc(1024); 
-                  sprintf(s, "[LT \n\t%s \n\t%s]", $1);
+                  sprintf(s, "\n[LT %s %s]", $1);
                   $$ = s; }
     | expr LE expr
                 { char *s = malloc(1024); 
-                  sprintf(s, "[LE \n\t%s \n\t%s]", $1, $3);
+                  sprintf(s, "\n[LE %s %s]", $1, $3);
                   $$ = s; }
     | expr EQ expr
                 { char *s = malloc(1024);
-                  sprintf(s, "[EQ \n\t%s \n\t%s]", $1, $3);
+                  sprintf(s, "\n[EQ %s %s]", $1, $3);
                   $$ = s; }
     | '!' expr  { char *s = malloc(512);
-                  sprintf(s, "[NEGATION \n\t%s]", $2);
+                  sprintf(s, "\n[NEGATION %s]", $2);
                   $$ = s; }
     | '(' expr ')'
                 { $$ = $2; }
     | ID        { char* s = malloc(512);
-                  sprintf(s, "[CONSTANT ID %s]", $1);
+                  sprintf(s, "\n[ID %s]", $1);
                   $$ = s; }
     | INTEGER   { char* s = malloc(512);
-                  sprintf(s, "[CONSTANT %d]", $1);
+                  sprintf(s, "\n[CONSTANT %d]", $1);
                   $$ = s; }
     | STRING    { char* s = malloc(512); 
-                  sprintf(s, "[CONSTANT STRING %s]", $1); 
+                  sprintf(s, "\n[CONSTANT STRING %s]", $1); 
                   $$ = s; }
-    | TRUE_Y    { $$ = "[CONSTANT TRUE]"; }
-    | FALSE_Y   { $$ = "[CONSTANT FALSE]"; }
+    | TRUE_Y    { $$ = "\n[CONSTANT TRUE]"; }
+    | FALSE_Y   { $$ = "\n[CONSTANT FALSE]"; }
     ;
 
 expr_arg_list :
