@@ -1,7 +1,8 @@
 %{
 #include <stdlib.h>
 #include <string.h>
-#include "ast.h"
+//#include "ast.h"
+#include "looli.h"
 
 
 char* buffer;
@@ -56,7 +57,7 @@ symbol [.,:;(){}=]
 "<="                                    return LE;
 "=="                                    return EQ;
 \"                                      {   clean();
-                                            strcat(buffer,yyetxt);
+                                            strcat(buffer,yytext);
                                             BEGIN(string);
                                         }
 <string>(\\.|[^\\"\0\n])*               strcat(buffer,yytext);
