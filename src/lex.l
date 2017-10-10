@@ -85,7 +85,7 @@ symbol [.,:;(){}=]
 .                                       error("I have no idea of what this is.");
 %%
 int yywrap (void) {
-  return 0;
+  return 1;
 }
 
 
