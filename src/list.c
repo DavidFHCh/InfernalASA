@@ -1,6 +1,6 @@
 #include "list.h"
 
-static int new_node (Node** node, void* element) {
+static int new_node(Node** node, void* element) {
   Node* n = (Node*) malloc (sizeof (Node));
   if (n == NULL)
     return 1;
@@ -12,18 +12,18 @@ static int new_node (Node** node, void* element) {
   return 0;
 }
 
-int new_list (List** list, Type_List type) {
+int new_list(List** list, Type_List type) {
   List* l = (List*) malloc (sizeof (List));
   if (l == NULL)
     return 1;
   l->head = l->last = NULL;
-  l->elementos = 0;
-  l->tipo = type;
+  l->elements = 0;
+  l->l_type= type;
   *list = l;
   return 0;
 }
 
-int add (List* list, void* element) {
+int add_e(List* list, void* element) {
   Node* new;
   if (new_node (&new, element))
     return 1;

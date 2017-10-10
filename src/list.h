@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 typedef enum _type_list Type_List;
 typedef struct _node Node;
 typedef struct _list List;
@@ -29,4 +31,4 @@ struct _list {
 
 int new_list (List**, Type_List);
 int add_e (List*, void*);
-#define add(L,E) (add_e(L,(void*) E))
+#define add(L, E) (add_e(L, (void*) E))

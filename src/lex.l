@@ -1,7 +1,8 @@
 %{
 #include <stdlib.h>
 #include <string.h>
-#include "ast.h"
+//#include "ast.h"
+#include "looli.h"
 
 
 char* buffer;
@@ -12,7 +13,7 @@ void error (char*);
 
 letter [A-Za-z]
 digit [0-9]
-whitespace [\f\r\t\v]
+whitespace [ \f\r\t\v]
 operator [-+*/<!]
 symbol [.,:;(){}=]
 %x string
@@ -56,7 +57,7 @@ symbol [.,:;(){}=]
 "<="                                    return LE;
 "=="                                    return EQ;
 \"                                      {   clean();
-                                            strcat(buffer,yyetxt);
+                                            strcat(buffer,yytext);
                                             BEGIN(string);
                                         }
 <string>(\\.|[^\\"\0\n])*               strcat(buffer,yytext);
@@ -84,7 +85,7 @@ symbol [.,:;(){}=]
 .                                       error("I have no idea of what this is.");
 %%
 int yywrap (void) {
-  return 0;
+  return 1;
 }
 
 
