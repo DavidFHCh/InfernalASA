@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-//#include "ast.h"
+#include <string.h>
 #include "list.h"
 
 void yyerror (char*);
@@ -11,7 +11,7 @@ extern FILE *yyin;
 extern char* yytext;
 extern FILE* yyout;
 extern int yylineno;
-
+char *result;
 
 %}
 
@@ -44,7 +44,7 @@ extern int yylineno;
 program :
     class       { char *s = malloc(1024);
                   sprintf(s, "%s\n", $1);
-                  printf("%s", s);
+                  result = s;
                   $$ = s; }
     | program class
                 { char *s = malloc(1024);
@@ -113,7 +113,7 @@ case_list :
     %empty      { $$ = ""; }
     | case_list CASE INTEGER ':' expr_list BREAK ';'
                 { char *s = malloc(1024);
-                  sprintf(s, "%s \n[CASE %s \n\t%s]", $1, $3, $5);
+                  sprintf(s, "%s \n[CASE %d \n\t%s]", $1, $3, $5);
                   $$ = s; }
     ;
 
@@ -227,11 +227,14 @@ int main (int argc, char* argv[]){
         return 1;
     }
     yyin = fopen(argv[1],"r");
+    yyout = fopen(argv[2], "w");
     yyparse();
     fclose(yyin);
     if(errors) {
         printf("The program contains %d errors. PLEASE correct them.",errors);
     } else {
+        fwrite(result, 1, strlen(result), yyout);
+        fclose(yyout);
     }
     return 0;
 }

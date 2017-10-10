@@ -6,6 +6,12 @@ class Stupid inherits Dumb {
     b = true;
     b = false;
     a = 0;
+    switch(a){
+      case 0:
+        a = 0;
+        break;
+      default:
+    };
     return a;
   }
 }
